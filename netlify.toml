@@ -1,0 +1,7 @@
+# Netlify Dev
+# https://cli.netlify.com/netlify-dev/#netlifytoml-dev-block
+
+# 제품 모드
+[build]
+  command = "npm run build"
+  publish = "build" # 프로젝트 빌드 결과의 디렉토리를 지정합니다.
