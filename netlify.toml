@@ -4,4 +4,4 @@
 # 제품 모드
 [build]
   command = "npm run build"
-  publish = "client/build" # 프로젝트 빌드 결과의 디렉토리를 지정합니다.
+  publish = "build" # 프로젝트 빌드 결과의 디렉토리를 지정합니다.
