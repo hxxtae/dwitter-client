@@ -36,7 +36,7 @@ export default class AuthService {
 
   async logout() {
     return this.http.fetch('/auth/logout', {
-      method: 'GET',
+      method: 'POST',
     });
   }
 }
