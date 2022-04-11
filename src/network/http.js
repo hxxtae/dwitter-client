@@ -16,9 +16,17 @@ export default class HttpClient {
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
-      }
+      },
+      credentials: 'include',
+      // - credentials
+      //   클라이언트가 서버로 요청을 보낼때, '어떤 경우'에 쿠키 정보를 포함해서 보낼건지를 설정 할 수 있다.
+      //   그래서 'same-origin' 이나 'include' 를 지정하면 자동으로 브라우저가 쿠키의 정보를 읽어서 여기 header 에 포함되어 전달된다.
+      // - ommit : 어떤 경우에도 절대! 쿠키 정보를 포함하지 않는다.
+      // - same-origin : 도메인이 동일한 경우(same-origin 인 경우) 에만 쿠키를 자동으로 포함
+      // - include : 다른 도메인 이라도 (cross-origin 인 경우) 쿠키를 포함
     });
 
+    // 1. check res object
     let data;
     try {
       data = await res.json();
@@ -26,6 +34,7 @@ export default class HttpClient {
       console.error(error);
     }
     
+    // 2. check res.status object (not 2xx)
     if (res.status > 299 || res.status < 200) {
       const message = data && data.message ? data.message : "Something went wrong !!";
       const error = new Error(message);
