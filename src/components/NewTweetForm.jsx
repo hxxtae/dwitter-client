@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 
 const NewTweetForm = ({ tweetService, onError, onCreated }) => {
   const [tweet, setTweet] = useState('');
+  const [submitChk, setSubmitChk] = useState(true);
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    tweetService
-      .postTweet(tweet)
-      .then((created) => {
-        setTweet('');
-        onCreated(created);
-      })
-      .catch(onError);
+    if (submitChk) {
+      tweetService
+        .postTweet(tweet)
+        .then((created) => {
+          setTweet('');
+          onCreated(created);
+          setSubmitChk((prev) => !prev);
+        })
+        .catch(onError);
+      setSubmitChk((prev) => !prev);
+    }
   };
 
   const onChange = (event) => {
