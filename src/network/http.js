@@ -5,9 +5,10 @@
 // - 여기서 반복되는 옵션과 에러 처리를 하나의 함수안에 선언.
 
 export default class HttpClient {
-  constructor(baseURL, authErrorEventBus) {
+  constructor(baseURL, authErrorEventBus, getCsrfToken) {
     this.BASE_URL = baseURL;
     this.authErrorEventBus = authErrorEventBus;
+    this.getCsrfToken = getCsrfToken;
   }
 
   async fetch(url, options) {
@@ -16,6 +17,7 @@ export default class HttpClient {
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
+        'dwitter-csrf-token': this.getCsrfToken(),
       },
       credentials: 'include',
       // - credentials
