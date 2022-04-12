@@ -14,11 +14,14 @@ import Login from '../pages/Login';
 const AuthContext = createContext({});
 
 const contextRef = createRef();
+const csrfRef = createRef();
 
 export function AuthProvider({ authService, authErrorEventBus, children }) {
   const [user, setUser] = useState(undefined);
+  const [csrfToken, setCsrfToken] = useState(undefined);
 
   useImperativeHandle(contextRef, () => (user ? user.token : undefined));
+  useImperativeHandle(csrfRef, () => csrfToken);
 
   useEffect(() => {
     authErrorEventBus.listen((err) => {
@@ -28,11 +31,16 @@ export function AuthProvider({ authService, authErrorEventBus, children }) {
   }, [authErrorEventBus]);
 
   useEffect(() => {
+    authService.csrfToken().then(setCsrfToken).catch(console.error);
+  }, [authService]);
+
+  useEffect(() => {
     authService.me().then(setUser).catch(console.error);
   }, [authService]);
-  // - AuthService 객체 -> useCallback Hook ????
   // - useEffect 에서는 이 object의 reference가 이전에 주어진 object의 reference가 같은지를 확인한다.
-  // - 새로 만들어진 object는 값이 같더라도 새로운 reference 를 가지기 때문에 callback 은 매번 실행된다.
+  // - 새로 만들어진 object는 값이 같더라도 새로운 reference 를 가지기 때문에 callback 은 매번 실행된다.?
+  
+  // - 어플리케이션이 실행될 때 한번만 실행 된다.
   
   const signUp = useCallback(
     async (username, password, name, email, url) =>
@@ -89,4 +97,5 @@ export class AuthErrorEventBus {
 
 export default AuthContext;
 export const fetchToken = () => contextRef.current;
+export const fetchCsrfToken = () => csrfRef.current;
 export const useAuth = () => useContext(AuthContext);
