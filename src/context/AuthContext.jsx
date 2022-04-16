@@ -19,6 +19,7 @@ const csrfRef = createRef();
 export function AuthProvider({ authService, authErrorEventBus, children }) {
   const [user, setUser] = useState(undefined);
   const [csrfToken, setCsrfToken] = useState(undefined);
+  console.log('AuthContext');
 
   useImperativeHandle(contextRef, () => (user ? user.token : undefined));
   useImperativeHandle(csrfRef, () => csrfToken);
@@ -36,10 +37,7 @@ export function AuthProvider({ authService, authErrorEventBus, children }) {
 
   useEffect(() => {
     authService.me().then(setUser).catch(console.error);
-  }, [authService]);
-  // - useEffect 에서는 이 object의 reference가 이전에 주어진 object의 reference가 같은지를 확인한다.
-  // - 새로 만들어진 object는 값이 같더라도 새로운 reference 를 가지기 때문에 callback 은 매번 실행된다.?
-  
+  }, [authService]);  
   // - 어플리케이션이 실행될 때 한번만 실행 된다.
   
   const signUp = useCallback(
