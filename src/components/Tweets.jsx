@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useLayoutEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Banner from './Banner';
 import NewTweetForm from './NewTweetForm';
@@ -11,7 +11,7 @@ const Tweets = memo(({ tweetService, username, addable }) => {
   const history = useHistory();
   const { user } = useAuth();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     tweetService
       .getTweets(username)
       .then((tweets) => setTweets([...tweets]))

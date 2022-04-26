@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -17,6 +18,8 @@ const contextRef = createRef();
 const csrfRef = createRef();
 
 export function AuthProvider({ authService, authErrorEventBus, children }) {
+  console.log("AuthProvider");
+
   const [user, setUser] = useState(undefined);
   const [csrfToken, setCsrfToken] = useState(undefined);
   console.log('AuthContext');
@@ -31,11 +34,11 @@ export function AuthProvider({ authService, authErrorEventBus, children }) {
     });
   }, [authErrorEventBus]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     authService.csrfToken().then(setCsrfToken).catch(console.error);
   }, [authService]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     authService.me().then(setUser).catch(console.error);
   }, [authService]);  
   // - 어플리케이션이 실행될 때 한번만 실행 된다.
@@ -96,4 +99,5 @@ export class AuthErrorEventBus {
 export default AuthContext;
 export const fetchToken = () => contextRef.current;
 export const fetchCsrfToken = () => csrfRef.current;
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext); // custom hook
+
